@@ -7,7 +7,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-var catalog = map[string]bookstore.Book{
+var catalog = bookstore.Catalog{
 	"1": {
 		ID:                 "1",
 		Title:              "Hannibal",
@@ -15,7 +15,7 @@ var catalog = map[string]bookstore.Book{
 		Author:             "Thomas Harris",
 		Edition:            "First edition",
 		OnSpecial:          true,
-		PercentageDiscount: 0.10,
+		PercentageDiscount: 10,
 		Price:              11000,
 	},
 	"2": {
@@ -25,7 +25,7 @@ var catalog = map[string]bookstore.Book{
 		Author:             "Thomas Harris",
 		Edition:            "Fourth edition",
 		OnSpecial:          true,
-		PercentageDiscount: 0.05,
+		PercentageDiscount: 5,
 		Price:              10000,
 	},
 }
@@ -40,7 +40,7 @@ func TestBook(t *testing.T) {
 		Author:             "Thomas Harris",
 		Edition:            "First edition",
 		OnSpecial:          true,
-		PercentageDiscount: 0.10,
+		PercentageDiscount: 10,
 		Price:              10000,
 	}
 
@@ -62,7 +62,7 @@ func TestGetAllBooks(t *testing.T) {
 			Author:             "Thomas Harris",
 			Edition:            "First edition",
 			OnSpecial:          true,
-			PercentageDiscount: 0.10,
+			PercentageDiscount: 10,
 			Price:              11000,
 		},
 		{
@@ -72,12 +72,12 @@ func TestGetAllBooks(t *testing.T) {
 			Author:             "Thomas Harris",
 			Edition:            "Fourth edition",
 			OnSpecial:          true,
-			PercentageDiscount: 0.05,
+			PercentageDiscount: 5,
 			Price:              10000,
 		},
 	}
 
-	got := bookstore.GetAllBooks(catalog)
+	got := catalog.GetAllBooks()
 
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
@@ -88,7 +88,7 @@ func TestGetBookDetails(t *testing.T) {
 	t.Parallel()
 
 	want := "Hannibal, by Thomas Harris"
-	got := bookstore.GetBookDetails(catalog, "1")
+	got := catalog.GetBookDetails("1")
 
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
@@ -105,7 +105,7 @@ func TestBookDetails(t *testing.T) {
 		Author:             "Thomas Harris",
 		Edition:            "First edition",
 		OnSpecial:          true,
-		PercentageDiscount: 0.10,
+		PercentageDiscount: 10,
 		Price:              10000,
 	}
 
@@ -114,5 +114,49 @@ func TestBookDetails(t *testing.T) {
 
 	if want != got {
 		t.Errorf("Want: %s, Got: %s", want, got)
+	}
+}
+
+func TestNetPrice(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		ID:                 "1",
+		Title:              "Hannibal",
+		Copies:             1000,
+		Author:             "Thomas Harris",
+		Edition:            "First edition",
+		OnSpecial:          true,
+		PercentageDiscount: 10,
+		Price:              10000,
+	}
+
+	want := 9000
+	got := b.NetPrice()
+
+	if want != got {
+		t.Errorf("Want net price: %d, Got net price: %d", want, got)
+	}
+}
+
+func TestSalePrice(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		ID:                 "1",
+		Title:              "Hannibal",
+		Copies:             1000,
+		Author:             "Thomas Harris",
+		Edition:            "First edition",
+		OnSpecial:          true,
+		PercentageDiscount: 10,
+		Price:              10000,
+	}
+
+	want := 5000
+	got := b.SalePrice()
+
+	if want != got {
+		t.Errorf("Want sale price: %d, Got sale price: %d", want, got)
 	}
 }

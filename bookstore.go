@@ -9,26 +9,36 @@ type Book struct {
 	Author             string
 	Edition            string
 	OnSpecial          bool
-	PercentageDiscount float64
+	PercentageDiscount int
 	Price              int
 }
 
 type Catalog map[string]Book
 
-func GetAllBooks(catalog Catalog) []Book {
+func (c Catalog) GetAllBooks() []Book {
 	books := []Book{}
 
-	for _, b := range catalog {
+	for _, b := range c {
 		books = append(books, b)
 	}
 
 	return books
 }
 
-func GetBookDetails(catalog Catalog, id string) string {
-	return catalog[id].Details()
+func (c Catalog) GetBookDetails(id string) string {
+	return c[id].Details()
 }
 
 func (b Book) Details() string {
 	return fmt.Sprintf("%s, by %s", b.Title, b.Author)
+}
+
+func (b Book) NetPrice() int {
+	discount := b.Price / b.PercentageDiscount
+	return b.Price - discount
+}
+
+func (b Book) SalePrice() int {
+	discount := b.Price / 2
+	return b.Price - discount
 }
