@@ -160,3 +160,26 @@ func TestSalePrice(t *testing.T) {
 		t.Errorf("Want sale price: %d, Got sale price: %d", want, got)
 	}
 }
+
+func TestSetTitle(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		ID:                 "1",
+		Title:              "Hannibal",
+		Copies:             1000,
+		Author:             "Thomas Harris",
+		Edition:            "First edition",
+		OnSpecial:          true,
+		PercentageDiscount: 10,
+		Price:              10000,
+	}
+
+	want := "Hannibal Lecter"
+	b.SetTitle("Hannibal Lecter")
+	got := b.Title
+
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
+	}
+}

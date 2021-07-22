@@ -42,3 +42,7 @@ func (b Book) SalePrice() int {
 	discount := b.Price / 2
 	return b.Price - discount
 }
+
+func (b *Book) SetTitle(t string) {
+	b.Title = t
+}
