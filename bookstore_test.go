@@ -183,3 +183,103 @@ func TestSetTitle(t *testing.T) {
 		t.Error(cmp.Diff(want, got))
 	}
 }
+
+func TestSetPriceCents(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		ID:                 "1",
+		Title:              "Hannibal",
+		Copies:             1000,
+		Author:             "Thomas Harris",
+		Edition:            "First edition",
+		OnSpecial:          true,
+		PercentageDiscount: 10,
+		Price:              10000,
+	}
+
+	b.SetPriceCents(8000)
+	want := 8000
+	got := b.Price
+
+	if got != want {
+		t.Errorf("Want price: %d, Got price: %d", want, got)
+	}
+}
+
+func TestAddBook(t *testing.T) {
+	book := bookstore.Book{
+		ID:                 "3",
+		Title:              "Watchmen",
+		Copies:             3000,
+		Author:             "Alan Moore",
+		Edition:            "6th edition",
+		OnSpecial:          false,
+		PercentageDiscount: 5,
+		Price:              20000,
+	}
+
+	catalog := bookstore.Catalog{
+		"1": {
+			ID:                 "1",
+			Title:              "Hannibal",
+			Copies:             1000,
+			Author:             "Thomas Harris",
+			Edition:            "First edition",
+			OnSpecial:          true,
+			PercentageDiscount: 10,
+			Price:              11000,
+		},
+		"2": {
+			ID:                 "2",
+			Title:              "Silence of the lambs",
+			Copies:             2000,
+			Author:             "Thomas Harris",
+			Edition:            "Fourth edition",
+			OnSpecial:          true,
+			PercentageDiscount: 5,
+			Price:              10000,
+		},
+	}
+
+	catalog.AddBook(book)
+
+	want := bookstore.Catalog{
+		"1": {
+			ID:                 "1",
+			Title:              "Hannibal",
+			Copies:             1000,
+			Author:             "Thomas Harris",
+			Edition:            "First edition",
+			OnSpecial:          true,
+			PercentageDiscount: 10,
+			Price:              11000,
+		},
+		"2": {
+			ID:                 "2",
+			Title:              "Silence of the lambs",
+			Copies:             2000,
+			Author:             "Thomas Harris",
+			Edition:            "Fourth edition",
+			OnSpecial:          true,
+			PercentageDiscount: 5,
+			Price:              10000,
+		},
+		"3": {
+			ID:                 "3",
+			Title:              "Watchmen",
+			Copies:             3000,
+			Author:             "Alan Moore",
+			Edition:            "6th edition",
+			OnSpecial:          false,
+			PercentageDiscount: 5,
+			Price:              20000,
+		},
+	}
+
+	got := catalog
+
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
+	}
+}

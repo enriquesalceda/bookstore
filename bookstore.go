@@ -25,6 +25,10 @@ func (c Catalog) GetAllBooks() []Book {
 	return books
 }
 
+func (c *Catalog) AddBook(b Book) {
+	(*c)[b.ID] = b
+}
+
 func (c Catalog) GetBookDetails(id string) string {
 	return c[id].Details()
 }
@@ -45,4 +49,8 @@ func (b Book) SalePrice() int {
 
 func (b *Book) SetTitle(t string) {
 	b.Title = t
+}
+
+func (b *Book) SetPriceCents(p int) {
+	b.Price = p
 }
