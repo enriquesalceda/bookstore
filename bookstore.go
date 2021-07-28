@@ -14,6 +14,21 @@ type Book struct {
 	OnSpecial          bool
 	percentageDiscount int
 	Price              int
+	category           string
+}
+
+const (
+	Autobiography  = "Autobiography"
+	Romance        = "Romance"
+	ScienceFiction = "ScienceFiction"
+	Programming    = "Programming"
+)
+
+var ValidCategories = map[string]bool{
+	Autobiography:  true,
+	Romance:        true,
+	ScienceFiction: false,
+	Programming:    true,
 }
 
 type Catalog map[string]Book
@@ -69,4 +84,21 @@ func (b *Book) SetDiscountPercent(p int) error {
 
 func (b Book) DiscountPercent() int {
 	return b.percentageDiscount
+}
+
+func TestIsValidCategory(c string) bool {
+	return ValidCategories[c]
+}
+
+func (b Book) GetCategory() string {
+	return b.category
+}
+
+func (b *Book) SetCategory(c string) error {
+	if ValidCategories[c] {
+		b.category = c
+		return nil
+	}
+
+	return errors.New("this is not a valid category")
 }

@@ -306,3 +306,70 @@ func TestSetDiscountPercent(t *testing.T) {
 		t.Errorf("Want: %d, Got: %d", want, got)
 	}
 }
+
+func TestValidCategories(t *testing.T) {
+	tsc := []struct {
+		category string
+		want     bool
+	}{
+		{
+			category: bookstore.Autobiography,
+			want:     true,
+		},
+		{
+			category: bookstore.Romance,
+			want:     true,
+		},
+		{
+			category: bookstore.ScienceFiction,
+			want:     false,
+		},
+		{
+			category: bookstore.Programming,
+			want:     true,
+		},
+	}
+
+	for _, ts := range tsc {
+		got := bookstore.ValidCategories[ts.category]
+		want := ts.want
+
+		if want != got {
+			t.Errorf("Want: %v, Got: %v", want, got)
+		}
+	}
+}
+
+func TestCategoryAccessors(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		ID:        "1",
+		Title:     "Hannibal",
+		Copies:    1000,
+		Author:    "Thomas Harris",
+		Edition:   "First edition",
+		OnSpecial: true,
+		Price:     10000,
+	}
+
+	initialCategory := b.GetCategory()
+
+	if initialCategory != "" {
+		t.Errorf("Initial category must be an empty string")
+	}
+
+	err := b.SetCategory(bookstore.Programming)
+
+	if err != nil {
+		t.Error("Setting bad category should raise an error")
+	}
+
+	want := bookstore.Autobiography
+	b.SetCategory(want)
+	got := b.GetCategory()
+
+	if want != got {
+		t.Errorf("Expected: %s category. Received: %s", want, got)
+	}
+}
