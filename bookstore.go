@@ -18,10 +18,12 @@ type Book struct {
 }
 
 const (
-	Autobiography  = "Autobiography"
-	Romance        = "Romance"
-	ScienceFiction = "ScienceFiction"
-	Programming    = "Programming"
+	Autobiography             = "Autobiography"
+	Romance                   = "Romance"
+	ScienceFiction            = "ScienceFiction"
+	Programming               = "Programming"
+	MinimumPercentageDiscount = 0
+	MaximumPercentageDiscount = 100
 )
 
 var ValidCategories = map[string]bool{
@@ -74,7 +76,7 @@ func (b *Book) SetPriceCents(p int) {
 }
 
 func (b *Book) SetDiscountPercent(p int) error {
-	if p > 100 || p < 0 {
+	if p > MaximumPercentageDiscount || p < MinimumPercentageDiscount {
 		return errors.New("discount price should be between 0 and 100")
 	}
 

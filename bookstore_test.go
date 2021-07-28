@@ -2,7 +2,6 @@ package bookstore_test
 
 import (
 	"bookstore"
-	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -75,9 +74,6 @@ func TestGetAllBooks(t *testing.T) {
 	}
 
 	got := catalog.GetAllBooks()
-
-	fmt.Println(want)
-	fmt.Println(got)
 
 	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(bookstore.Book{})) {
 		t.Error(cmp.Diff(want, got))
