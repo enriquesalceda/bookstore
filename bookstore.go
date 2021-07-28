@@ -1,6 +1,9 @@
 package bookstore
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Book struct {
 	ID                 string
@@ -9,7 +12,7 @@ type Book struct {
 	Author             string
 	Edition            string
 	OnSpecial          bool
-	PercentageDiscount int
+	percentageDiscount int
 	Price              int
 }
 
@@ -38,7 +41,7 @@ func (b Book) Details() string {
 }
 
 func (b Book) NetPrice() int {
-	discount := b.Price / b.PercentageDiscount
+	discount := b.Price / b.DiscountPercent()
 	return b.Price - discount
 }
 
@@ -53,4 +56,17 @@ func (b *Book) SetTitle(t string) {
 
 func (b *Book) SetPriceCents(p int) {
 	b.Price = p
+}
+
+func (b *Book) SetDiscountPercent(p int) error {
+	if p > 100 || p < 0 {
+		return errors.New("discount price should be between 0 and 100")
+	}
+
+	b.percentageDiscount = p
+	return nil
+}
+
+func (b Book) DiscountPercent() int {
+	return b.percentageDiscount
 }
